@@ -1,0 +1,48 @@
+As configurações padrão do Spring Boot são adicionadas pelos starters que são inseridos no pom.xml;
+	Por Exemplo: starter-parent, starter, starter-web
+
+As configurações personalizadas podem ser construídas e anotadas com as anotações @Configuration e @Bean;
+	A anotação @Bean informa ao Spring que ele deve cuidar da instanciação do objeto para que possa ser 
+		injetado no contexto da minha aplicação;
+	A anotação @Qualifier("nomeBean") serve para indicar qual o @Bean que o objeto injetado irá representar;
+		Exemplo:
+			@Bean(name="objeto")
+			public String objeto() {
+				return "config";
+			}
+			
+			@Autowired
+			@Qualifier("objeto")
+			private String objeto;
+
+IOC = Inversion Of Controller (Inversão de Controle) ==== para que o Spring gerencia a instancia dos objetos
+	as anotações abaixo devem ser usados nas classes. o Spring escaneneia todos os pacotes depois da classes
+	Main e instancia todos as classes e métodos anotados com as anotações abaixo, para que gerencie o ciclo 
+	de vida durante a execução do projeto.
+						                 IOC
+			
+			@Configuration                                      @Component
+			
+			   @Bean							@Controller    @Repository    @Service
+			   
+A anotação @ComponentScan(basePackages = {}), na classe Main, serve para informar ao Spring quais pacotes ele deve verificar
+	para que sejam escaneados todos os Beans do projeto, o parametro é um array com todos os pacotes. Por default o Spring
+	já escaneia todas as classes após o Main, somente utilizar quando os Beans estiverem fora do escopo padrão.
+	
+Injeção de depências = delegar a outras classes ou ao framework que instâncie e gerencie as classes.
+	A injeção de dependência pode ocorrer de três formas:
+		Com a anotação @Autowired em cima da criação do objeto;
+		Com a criação de um objeto e a instanciação do objeto ocorrendo pelo construtor com a anotação @Autowired
+			sobre o construtor; Com construtor é possível omitir a anotação;
+		E através de um método set, da mesma forma que funciona com o construtor.
+
+A anotação @Value("${propriedade}") permite que se busque valores alocados no arquivo de configurações application,
+	dentro do diretório Resources;
+	
+O Spring oferece a opção de profiles, para que haja uma divisão entre configurações de desenvolvimento e de produção
+	Podem ser definidos novos properties, seguindo a denominação application-development ou application-production e
+	em um properties principal definir o profile para aquele momento de execução;
+	Nas classes pode ser utilizada a anotação @Profile("development") para que seja determinado o profile para execução
+	dessa classe.
+
+A interface funcional CommandLineRunner pode ser utilizada quando ser quer passar argumentos durante a inicializaão do spring boot.
